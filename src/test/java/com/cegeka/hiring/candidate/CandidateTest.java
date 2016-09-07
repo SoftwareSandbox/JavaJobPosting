@@ -5,27 +5,34 @@ import com.cegeka.hiring.company.CompanyTestBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.cegeka.hiring.company.BenefitsTestBuilder.benefits;
+import static com.cegeka.hiring.company.LearningOpportunitiesTestBuilder.learningOpportunities;
+
 public class CandidateTest {
+
+    private Company cegeka;
 
     @Before
     public void setUp() throws Exception {
-        Company cegeka = CompanyTestBuilder.company()
+        cegeka = CompanyTestBuilder.company()
                 .withName("Cegeka")
+                .withBenefits(benefits()
+                        .flexIncomePlan()
+                        .companyCar()
+                        .laptop()
+                        .mealVouchers())
+                .withPerks("Individual Growth possibilities",
+                           "Variety of projects",
+                           "Excellent learning community")
+                .withLearningOpportunities(learningOpportunities()
+                        .internalCourses("JavaScript Basic", "JavaScript Advanced", "Agile Software Engineering")
+                        .externalCourses("The Lead Developer", "QCon", "Devoxx", "Techorama")
+                        .readingGroups("DDD", "Refactoring")
+                        .eventHosting("LeanCoffee Leuven Meetup", "Scala BE Meetup", "Facilitation GameLab")
+                        .hackathons("Cegeka Exploration Days")
+                        .innovationProjects()
+                )
                 .build();
-
-        // flex income plan
-        // company car
-        // laptop
-        // individual growth possibilities
-        // variety of projects
-        // excellent learning community
-        // wide range of learning opportunities: (sub-builder)
-        //      internal courses
-        //      external courses
-        //      reading groups
-        //      event hosting (meetups)
-        //      hackathons
-        //      innovation projects
     }
 
     // TDD
