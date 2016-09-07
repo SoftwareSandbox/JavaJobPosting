@@ -2,11 +2,14 @@ package com.cegeka.hiring.candidate;
 
 import com.cegeka.hiring.company.Company;
 import com.cegeka.hiring.company.CompanyTestBuilder;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.cegeka.hiring.candidate.CandidateTestBuilder.candidate;
 import static com.cegeka.hiring.company.BenefitsTestBuilder.benefits;
 import static com.cegeka.hiring.company.LearningOpportunitiesTestBuilder.learningOpportunities;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CandidateTest {
 
@@ -30,8 +33,7 @@ public class CandidateTest {
                         .readingGroups("DDD", "Refactoring")
                         .eventHosting("LeanCoffee Leuven Meetup", "Scala BE Meetup", "Facilitation GameLab")
                         .hackathons("Cegeka Exploration Days")
-                        .innovationProjects()
-                )
+                        .innovationProjects())
                 .build();
     }
 
@@ -45,7 +47,13 @@ public class CandidateTest {
 
     @Test
     public void candidate_ShouldMatchOnDNAProperties() throws Exception {
-
+        Candidate matchingCandidate = candidate()
+                .withDNAProperties("Learning Mentality",
+                                   "Values Devops",
+                                   "Welcomes pairing/teamplayer",
+                                   "Keen eye for improvement")
+                .build();
+        assertThat(cegeka.isLookingFor(matchingCandidate)).isTrue();
     }
 
     @Test

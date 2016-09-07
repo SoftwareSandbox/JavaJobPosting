@@ -1,5 +1,7 @@
 package com.cegeka.hiring.company;
 
+import com.cegeka.hiring.candidate.Candidate;
+
 import java.util.List;
 
 public class Company {
@@ -29,5 +31,9 @@ public class Company {
 
     public LearningOpportunities getLearningOpportunities() {
         return learningOpportunities;
+    }
+
+    public boolean isLookingFor(Candidate candidate) {
+        return false;
     }
 }
