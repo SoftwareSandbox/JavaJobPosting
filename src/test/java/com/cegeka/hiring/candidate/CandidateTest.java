@@ -63,12 +63,6 @@ public class CandidateTest {
     }
 
     @Test
-    public void candidate_WhenHasExperienceWithDDD_ThenGetsBonuspointsAtInterview() throws Exception {
-        Candidate matchingCandidate = candidate().withSkills("Domain Driven Design").build();
-        assertThat(cegeka.attributesBonusPointsAtInterview(matchingCandidate)).isEqualTo(MatchOutcome.VERY_LIKELY);
-    }
-
-    @Test
     public void candidate_WhenCommunicating_PrefersHumansAndInteractionsOverProcessesAndTools() throws Exception {
         Candidate matchingCandidate = candidate().withCommunicationPreference(SPEECH).build();
         assertThat(cegeka.isLookingFor(matchingCandidate)).isEqualTo(MatchOutcome.VERY_LIKELY);
@@ -88,7 +82,13 @@ public class CandidateTest {
     }
 
     @Test
-    public void candidate_WhenOfferedParticipationInReadingGroup_AndDeclines_NoRaiseForYou() throws Exception {
+    public void whenHasExperienceWithDDD_ThenGetsBonuspointsAtInterview() throws Exception {
+        Candidate matchingCandidate = candidate().withSkills("Domain Driven Design").build();
+        assertThat(cegeka.attributesBonusPointsAtInterview(matchingCandidate)).isTrue();
+    }
+
+    @Test
+    public void whenOfferedParticipationInReadingGroup_AndDeclines_NoRaiseForYou() throws Exception {
         Candidate scrub = candidate().decliningOffersOf(new ReadingGroupProposition()).build();
         assertThatThrownBy(() -> cegeka.giveRaiseTo(scrub))
                 .isInstanceOf(NoRaiseForYouException.class)
