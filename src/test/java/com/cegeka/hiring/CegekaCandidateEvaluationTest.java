@@ -13,6 +13,7 @@ import static com.cegeka.hiring.company.LearningOpportunitiesTestBuilder.learnin
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@ShouldRunInContinuousIntegration
 public class CegekaCandidateEvaluationTest {
 
     private Company cegeka;
@@ -57,8 +58,8 @@ public class CegekaCandidateEvaluationTest {
         Candidate matchingCandidate = candidate()
                 .withSkills("Test Driven Development",
                             "Object Oriented Programming",
-                            "Welcomes pairing/teamplayer",
-                            "Keen eye for improvement")
+                            "Refactoring",
+                            "Continuous Integration")
                 .build();
         assertThat(cegeka.isLookingFor(matchingCandidate)).isEqualTo(MatchOutcome.VERY_LIKELY);
     }
