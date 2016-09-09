@@ -33,4 +33,9 @@ public class BenefitsTestBuilder {
         this.benefitsBuilder.append("Meal Vouchers");
         return this;
     }
+
+    public BenefitsTestBuilder medcare() {
+        this.benefitsBuilder.append("Medcare");
+        return this;
+    }
 }

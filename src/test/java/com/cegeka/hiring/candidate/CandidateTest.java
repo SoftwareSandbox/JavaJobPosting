@@ -1,15 +1,16 @@
 package com.cegeka.hiring.candidate;
 
-import com.cegeka.hiring.company.Company;
-import com.cegeka.hiring.company.CompanyTestBuilder;
-import org.assertj.core.api.Assertions;
+import com.cegeka.hiring.company.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.cegeka.hiring.candidate.CandidateTestBuilder.candidate;
+import static com.cegeka.hiring.candidate.CommunicationType.MAIL;
+import static com.cegeka.hiring.candidate.CommunicationType.SPEECH;
 import static com.cegeka.hiring.company.BenefitsTestBuilder.benefits;
 import static com.cegeka.hiring.company.LearningOpportunitiesTestBuilder.learningOpportunities;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class CandidateTest {
 
@@ -23,7 +24,8 @@ public class CandidateTest {
                         .flexIncomePlan()
                         .companyCar()
                         .laptop()
-                        .mealVouchers())
+                        .mealVouchers()
+                        .medcare())
                 .withPerks("Individual Growth possibilities",
                            "Variety of projects",
                            "Excellent learning community")
@@ -33,17 +35,9 @@ public class CandidateTest {
                         .readingGroups("DDD", "Refactoring")
                         .eventHosting("LeanCoffee Leuven Meetup", "Scala BE Meetup", "Facilitation GameLab")
                         .hackathons("Cegeka Exploration Days")
-                        .innovationProjects())
+                        .innovationProjects("Continuous Delivery Pipeline", "Build Radiator"))
                 .build();
     }
-
-    // TDD
-    // OO skills
-    // DDD bonus
-    // continuous learning
-    // welcomes pairing/teamplayer
-    // keen eye for improvement
-    // values devops
 
     @Test
     public void candidate_ShouldMatchOnDNAProperties() throws Exception {
@@ -51,35 +45,53 @@ public class CandidateTest {
                 .withDNAProperties("Learning Mentality",
                                    "Values Devops",
                                    "Welcomes pairing/teamplayer",
-                                   "Keen eye for improvement")
+                                   "Keen eye for improvement",
+                                   "Open minded")
                 .build();
-        assertThat(cegeka.isLookingFor(matchingCandidate)).isTrue();
+        assertThat(cegeka.isLookingFor(matchingCandidate)).isEqualTo(MatchOutcome.VERY_LIKELY);
     }
 
     @Test
-    public void candidate_ShouldHaveRequiredExperience() throws Exception {
-
+    public void candidate_ShouldHaveRequiredSkills() throws Exception {
+        Candidate matchingCandidate = candidate()
+                .withSkills("Test Driven Development",
+                            "Object Oriented Programming",
+                            "Welcomes pairing/teamplayer",
+                            "Keen eye for improvement")
+                .build();
+        assertThat(cegeka.isLookingFor(matchingCandidate)).isEqualTo(MatchOutcome.VERY_LIKELY);
     }
 
     @Test
     public void candidate_WhenHasExperienceWithDDD_ThenGetsBonuspointsAtInterview() throws Exception {
-
+        Candidate matchingCandidate = candidate().withSkills("Domain Driven Design").build();
+        assertThat(cegeka.attributesBonusPointsAtInterview(matchingCandidate)).isEqualTo(MatchOutcome.VERY_LIKELY);
     }
 
     @Test
     public void candidate_WhenCommunicating_PrefersHumansAndInteractionsOverProcessesAndTools() throws Exception {
+        Candidate matchingCandidate = candidate().withCommunicationPreference(SPEECH).build();
+        assertThat(cegeka.isLookingFor(matchingCandidate)).isEqualTo(MatchOutcome.VERY_LIKELY);
 
+        Candidate nonMatchingCandidate = candidate().withCommunicationPreference(MAIL).build();
+        assertThat(cegeka.isLookingFor(nonMatchingCandidate)).isEqualTo(MatchOutcome.UNLIKELY);
     }
 
     @Test
-    public void candidate_ShouldBeOpenMinded() throws Exception {
-
+    public void candidate_WithCertainSelfProclamations_DoesNotMatchWithCegeka() throws Exception {
+        Candidate nonmatchingCandidate = candidate()
+                .withSelfProclamations("I know all there is to know about Software Engineering.",
+                                       "I don't care what other people say, I'm always right anyways.",
+                                       "Why would you write tests for a code change as small as that?")
+                .build();
+        assertThat(cegeka.isLookingFor(nonmatchingCandidate)).isEqualTo(MatchOutcome.NO_EFFING_WAY);
     }
 
     @Test
-    public void candidate_WhenThursday_IsOpenForEatingFries() throws Exception {
-
+    public void candidate_WhenOfferedParticipationInReadingGroup_AndDeclines_NoRaiseForYou() throws Exception {
+        Candidate scrub = candidate().decliningOffersOf(new ReadingGroupProposition()).build();
+        assertThatThrownBy(() -> cegeka.giveRaiseTo(scrub))
+                .isInstanceOf(NoRaiseForYouException.class)
+                .hasMessage("NO RAISE FOR YOU, SCRUB!");
     }
-
-    // catch NoContinuousLearningException { .noRaise(); }
 }

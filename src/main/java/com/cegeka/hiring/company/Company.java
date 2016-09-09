@@ -2,6 +2,7 @@ package com.cegeka.hiring.company;
 
 import com.cegeka.hiring.candidate.Candidate;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class Company {
@@ -33,7 +34,15 @@ public class Company {
         return learningOpportunities;
     }
 
-    public boolean isLookingFor(Candidate candidate) {
+    public MatchOutcome isLookingFor(Candidate candidate) {
+        return MatchOutcome.UNLIKELY;
+    }
+
+    public boolean attributesBonusPointsAtInterview(Candidate candidate) {
         return false;
+    }
+
+    public BigDecimal giveRaiseTo(Candidate decliningCandidate) throws NoRaiseForYouException {
+        return BigDecimal.ZERO;
     }
 }
